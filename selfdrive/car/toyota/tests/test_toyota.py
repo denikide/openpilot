@@ -13,6 +13,10 @@ Ecu = car.CarParams.Ecu
 ECU_NAME = {v: k for k, v in Ecu.schema.enumerants.items()}
 
 
+def check_fw_version(fw_version: bytes) -> bool:
+  return b'?' not in fw_version
+
+
 class TestToyotaInterfaces(unittest.TestCase):
   def test_car_sets(self):
     self.assertTrue(len(ANGLE_CONTROL_CAR - TSS2_CAR) == 0)
@@ -50,6 +54,23 @@ class TestToyotaInterfaces(unittest.TestCase):
 
 
 class TestToyotaFingerprint(unittest.TestCase):
+  def test_non_essential_ecus(self):
+    # Ensures only the cars that have multiple engine ECUs are in the engine non-essential ECU list
+    for car_model, ecus in FW_VERSIONS.items():
+      with self.subTest(car_model=car_model.value):
+        engine_ecus = {ecu for ecu in ecus if ecu[0] == Ecu.engine}
+        self.assertEqual(len(engine_ecus) > 1,
+                         car_model in FW_QUERY_CONFIG.non_essential_ecus[Ecu.engine],
+                         f"Car model unexpectedly {'not ' if len(engine_ecus) > 1 else ''}in non-essential list")
+
+  def test_valid_fw_versions(self):
+    # Asserts all FW versions are valid
+    for car_model, ecus in FW_VERSIONS.items():
+      with self.subTest(car_model=car_model.value):
+        for fws in ecus.values():
+          for fw in fws:
+            self.assertTrue(check_fw_version(fw), fw)
+
   # Tests for part numbers, platform codes, and sub-versions which Toyota will use to fuzzy
   # fingerprint in the absence of full FW matches:
   @settings(max_examples=100)
@@ -144,7 +165,7 @@ class TestToyotaFingerprint(unittest.TestCase):
         self.assertEqual(list(matches)[0], platform)
       else:
         # If a platform has multiple matches, add it and its matches
-        platforms_with_shared_codes |= {platform, *matches}
+        platforms_with_shared_codes |= {str(platform), *matches}
 
     self.assertEqual(platforms_with_shared_codes, FUZZY_EXCLUDED_PLATFORMS, (len(platforms_with_shared_codes), len(FW_VERSIONS)))
 

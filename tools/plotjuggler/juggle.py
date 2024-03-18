@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import multiprocessing
 import os
 import sys
 import platform
@@ -14,7 +13,7 @@ from functools import partial
 from openpilot.common.basedir import BASEDIR
 from openpilot.tools.lib.helpers import save_log
 
-from openpilot.tools.lib.logreader import LogReader
+from openpilot.tools.lib.logreader import LogReader, ReadMode
 
 juggle_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -27,7 +26,7 @@ MAX_STREAMING_BUFFER_SIZE = 1000
 
 def install():
   m = f"{platform.system()}-{platform.machine()}"
-  supported = ("Linux-x86_64", "Darwin-arm64", "Darwin-x86_64")
+  supported = ("Linux-x86_64", "Linux-aarch64", "Darwin-arm64", "Darwin-x86_64")
   if m not in supported:
     raise Exception(f"Unsupported platform: '{m}'. Supported platforms: {supported}")
 
@@ -74,12 +73,9 @@ def process(can, lr):
   return [d for d in lr if can or d.which() not in ['can', 'sendcan']]
 
 def juggle_route(route_or_segment_name, can, layout, dbc=None):
-  sr = LogReader(route_or_segment_name)
+  sr = LogReader(route_or_segment_name, default_mode=ReadMode.AUTO_INTERACTIVE)
 
-  with multiprocessing.Pool(24) as pool:
-    all_data = []
-    for p in pool.map(partial(process, can), sr.lrs):
-      all_data.extend(p)
+  all_data = sr.run_across_segments(24, partial(process, can))
 
   # Infer DBC name from logs
   if dbc is None:

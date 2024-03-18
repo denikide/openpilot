@@ -557,10 +557,6 @@
         <translation>閉じる</translation>
     </message>
     <message>
-        <source>dashcam</source>
-        <translation>ﾄﾞﾗｲﾌﾞﾚｺｰﾀﾞｰ</translation>
-    </message>
-    <message>
         <source>openpilot</source>
         <translation>openpilot</translation>
     </message>
@@ -630,12 +626,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Press confirm to erase all content and settings. Press cancel to resume boot.</source>
+        <source>Resetting device...
+This may take up to a minute.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Resetting device...
-This may take up to a minute.</source>
+        <source>System reset triggered. Press confirm to erase all content and settings. Press cancel to resume boot.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -743,6 +739,18 @@ This may take up to a minute.</source>
     <message>
         <source>Select a language</source>
         <translation>言語を選択</translation>
+    </message>
+    <message>
+        <source>Choose Software to Install</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>openpilot</source>
+        <translation type="unfinished">openpilot</translation>
+    </message>
+    <message>
+        <source>Custom Software</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1090,10 +1098,6 @@ This may take up to a minute.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Standard is recommended. In aggressive mode, openpilot will follow lead cars closer and be more aggressive with the gas and brake. In relaxed mode openpilot will stay further away from lead cars.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>End-to-End Longitudinal Control</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1119,6 +1123,10 @@ This may take up to a minute.</source>
     </message>
     <message>
         <source>Enable the openpilot longitudinal control (alpha) toggle to allow Experimental mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard is recommended. In aggressive mode, openpilot will follow lead cars closer and be more aggressive with the gas and brake. In relaxed mode openpilot will stay further away from lead cars. On supported cars, you can cycle through these personalities with your steering wheel distance button.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
